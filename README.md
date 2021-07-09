@@ -1,5 +1,6 @@
 # Back-End-Inventory
-<<<<<<< HEAD
+
+Project Intern Back End at RPL GDC Laboratory
 
 ## Requirement
 npm install  
@@ -12,6 +13,6 @@ npm install --save-nodemon
 npm install dotenv
 npm install mongoose
 
-=======
-Project Intern RPL GDC Laboratory
->>>>>>> 797fb76a700b88655edb95389e5f7aead6cf685a
+
+
+
