@@ -11,8 +11,8 @@ const RegisterValidation = data => {
         year: Joi.string(),
         phoneNumber: Joi.string(),
         homeAddress: Joi.string(),
-        email: Joi.string(),
-        password: Joi.string()
+        email: Joi.string().email(),
+        password: Joi.string().min(6)
     })
 
     return Schema.validate(data);
@@ -22,7 +22,7 @@ const LoginValidation = data => {
     
     const Schema = Joi.object({
         email: Joi.string(),
-        password: Joi.string()
+        password: Joi.string().min(6)
     })
 
     return Schema.validate(data);

@@ -13,6 +13,11 @@ npm install --save-nodemon
 npm install dotenv
 npm install mongoose
 
+## reference
+- Joi Documentation      : https://www.npmjs.com/package/@hapi/joi
+- findOne Documentation  : https://docs.mongodb.com/drivers/node/usage-examples/findOne/
+- bcrypt js Documentaion : https://www.npmjs.com/package/bcrypt
+- JWT documentation      : https://www.npmjs.com/package/jsonwebtoken
 
 
 

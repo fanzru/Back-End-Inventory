@@ -7,7 +7,8 @@ const newSchema = new mongoose.Schema({
     },
     NIM:{
         type: String,
-        required: true
+        required: true,
+        length: 10
     },
     major:{
         type: String,
@@ -23,13 +24,19 @@ const newSchema = new mongoose.Schema({
     },
     phoneNumber:{
         type: String,
-        required: true
+        required: true,
+        min: 9,
+        max: 13
     },
     homeAddress:{
         type: String,
         required: true
     },
     email:{
+        type: String,
+        required: true
+    },
+    password:{
         type: String,
         required: true
     },
