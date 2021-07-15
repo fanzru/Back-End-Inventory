@@ -4,15 +4,16 @@ const Joi = require('@hapi/joi');
 const RegisterValidation = data => {
     
     const Schema = Joi.object({
-        fullname: Joi.string(),
-        NIM: Joi.string().length(10),
-        major: Joi.string(),
-        faculty: Joi.string(),
-        year: Joi.string(),
-        phoneNumber: Joi.string(),
-        homeAddress: Joi.string(),
-        email: Joi.string().email(),
-        password: Joi.string().min(6)
+        fullname: Joi.string().required(),
+        NIM: Joi.string().length(10).required(),
+        major: Joi.string().required(),
+        faculty: Joi.string().required(),
+        year: Joi.string().required(),
+        phoneNumber: Joi.string().required(),
+        homeAddress: Joi.string().required(),
+        email: Joi.string().email().required(),
+        password: Joi.string().min(6).required(),
+        aslab: Joi.string().required()
     })
 
     return Schema.validate(data);
