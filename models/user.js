@@ -40,7 +40,7 @@ const newSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    status:{
+    aslab:{
         type: String,
         required: true
     },
