@@ -1,0 +1,26 @@
+GET http://localhost:5000/user
+
+###
+POST http://localhost:5000/user/register
+Content-Type: application/json
+
+{
+    "fullname": "Ananda Affan F",
+    "NIM": "1301194171",
+    "major": "Informatika",
+    "faculty": "Informatika",
+    "year": "2019",
+    "phoneNumber": "08132616333",
+    "homeAddress": "Jakarta",
+    "email": "affan@gmail.com",
+    "password": "111222333"
+}
+
+###
+POST http://localhost:5000/user/login
+Content-Type: application/json
+Authorization: 
+{
+    "email": "affan@gmail.com",
+    "password": "111222333"
+}

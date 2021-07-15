@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+//const Sequelize = require('sequelize');
 const newSchema = new mongoose.Schema({
     fullname:{
         type: String,

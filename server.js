@@ -1,6 +1,7 @@
 const express  = require('express');
-const mongoose = require('mongoose')
-
+const mongoose = require('mongoose');
+const session = require('express-session');
+//const mongoDBsession = require('connect-mongodb-session')(session)
 const authRoute = require('./routes/Auth');
 
 const app = express();
@@ -16,11 +17,18 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
 // midleware route
-app.use('/api/user',authRoute);
+//app.use(
+//  session({
+//    secret: 'key that will sign cookie',
+//    resave: false,
+//    saveUnitializied: false
+//  })
+//)
+app.use('/user',authRoute);
 
 // Database Access
 mongoose.connect(process.env.DATABASE,{useNewUrlParser: true, useUnifiedTopology: true},()=>
   console.log('Database Connected')
 );
 // Port Connected
-app.listen(5000,()=>console.log(`Server is Runing in Port ${port}`))
+app.listen(port,()=>console.log(`Server is Runing in Port ${port}`))
