@@ -36,9 +36,16 @@ router.post('/register',async(req,res)=>{
     
     try{
         const savedUser = await newUser.save();
-        res.send(savedUser)
+        res.json({
+            status: 200,
+            message: 'register success'
+        })
+            
     } catch(err) {
-        res.status(400).send(err)
+        res.json({
+            status: 400,
+            message: 'register failed'
+        })
     }
     
 });
@@ -57,8 +64,11 @@ router.post('/login',async(req,res)=> {
     if (!validPassword) return res.status(400).send('Invalid Password')
     
     // token auth
-    const token = jwt.sign({_id: userFound._id}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s'});
-    res.header('auth-token',token).send(token);
-    console.log('login sukses')
+    // const token = jwt.sign({_id: userFound._id}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s'});
+    // res.header('auth-token',token).send(token);
+    res.json({
+        Status: 200,
+        message: "Login Success"
+    })
 })
 module.exports = router;
