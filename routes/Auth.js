@@ -39,14 +39,16 @@ router.post('/register',async(req,res)=>{
         phoneNumber: req.body.phoneNumber,
         homeAddress: req.body.homeAddress,
         email: req.body.email,
-        password: hashedPassword
+        password: hashedPassword,
+        aslab: req.body.aslab
     });
     
     try{
         const savedUser = await newUser.save();
         res.json({
             status: 200,
-            message: 'register success'
+            message: 'register success',
+            details: savedUser
         })
             
     } catch(err) {
