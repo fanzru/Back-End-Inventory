@@ -12,12 +12,20 @@ router.get('/',(req,res)=>{
 router.post('/register',async(req,res)=>{
     // Validation for user input in api/user/register
     const {error} = RegisterValidation(req.body)
-    if(error) return res.status(400).send(error.details[0].message)
+    if(error) return res.json({
+        status: 400,
+        message: error.details[0].message,
+        error: error
+    })
     
     // check email in database
     const emailExist = await USER.findOne({email: req.body.email})
-    if(emailExist) return res.status(400).send('Email Already Exist!')
-    
+    if(emailExist) return res.json({
+        status: 400,
+        message: error.details[0].message,
+        error: emailExist
+    })
+
     // hash password to database
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.password,salt);
@@ -53,15 +61,25 @@ router.post('/register',async(req,res)=>{
 router.post('/login',async(req,res)=> {
     // Validation for user input in api/user/register
     const {error} = LoginValidation(req.body)
-    if(error) return res.status(400).send(error.details[0].message)
+    if(error) return res.json({
+        status: 400,
+        message: error.details[0].message,
+        error: error
+    })
     
     // check email in database
     const userFound = await USER.findOne({email: req.body.email})
-    if(!userFound) return res.status(400).send('Email Not Found')
+    if(!userFound) return res.json({
+        status: 400,
+        message: "Email Not Found"
+    })
     
     // check password owened by the email above
     const validPassword = await bcrypt.compare(req.body.password, userFound.password)
-    if (!validPassword) return res.status(400).send('Invalid Password')
+    if (!validPassword) return res.json({
+        status: 400,
+        message: "Invalid Password"
+    })
     
     // token auth
     // const token = jwt.sign({_id: userFound._id}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s'});
