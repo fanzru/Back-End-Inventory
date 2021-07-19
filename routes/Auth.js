@@ -45,14 +45,14 @@ router.post('/register',async(req,res)=>{
     
     try{
         const savedUser = await newUser.save();
-        res.json({
+        res.status(200).json({
             status: 200,
             message: 'register success',
             details: savedUser
         })
             
     } catch(err) {
-        res.json({
+        res.status(400).json({
             status: 400,
             message: 'register failed'
         })
@@ -61,9 +61,10 @@ router.post('/register',async(req,res)=>{
 });
 
 router.post('/login',async(req,res)=> {
+    
     // Validation for user input in api/user/register
     const {error} = LoginValidation(req.body)
-    if(error) return res.json({
+    if(error) return res.status(400).json({
         status: 400,
         message: error.details[0].message,
         error: error
@@ -71,14 +72,14 @@ router.post('/login',async(req,res)=> {
     
     // check email in database
     const userFound = await USER.findOne({email: req.body.email})
-    if(!userFound) return res.json({
+    if(!userFound) return res.status(400).json({
         status: 400,
         message: "Email Not Found"
     })
     
     // check password owened by the email above
     const validPassword = await bcrypt.compare(req.body.password, userFound.password)
-    if (!validPassword) return res.json({
+    if (!validPassword) return res.status(400).json({
         status: 400,
         message: "Invalid Password"
     })
@@ -87,7 +88,7 @@ router.post('/login',async(req,res)=> {
     //const token = jwt.sign({_id: userFound._id}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s'});
     //res.header('auth-token',token).send(token);
     
-    res.json({
+    res.status(200).json({
         Status: 200,
         message: "Login Success"
     })
