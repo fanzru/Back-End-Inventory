@@ -84,13 +84,12 @@ router.post('/login',async(req,res)=> {
     })
     
     // token auth
-    const token = jwt.sign({_id: userFound._id}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s'});
-    res.header('auth-token',token).send(token);
+    //const token = jwt.sign({_id: userFound._id}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s'});
+    //res.header('auth-token',token).send(token);
     
-    
-    // res.json({
-    //     Status: 200,
-    //     message: "Login Success"
-    // })
+    res.json({
+        Status: 200,
+        message: "Login Success"
+    })
 })
 module.exports = router;
