@@ -1,20 +1,21 @@
 const express  = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const cors = require('cors');
 //const mongoDBsession = require('connect-mongodb-session')(session)
 const authRoute = require('./routes/Auth');
 
 const app = express();
-
 require('dotenv').config();
-
 const port = process.env.PORT || 5000
+
 
 /* 
   Body parser in express and enable to use urlencode in postman
 */
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+app.use(cors());
 
 // midleware route
 //app.use(
