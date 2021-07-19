@@ -26,7 +26,12 @@ app.use(express.urlencoded({extended:true}));
 //)
 
 app.use('/user',authRoute);
-
+app.use((req,res, next)=>{
+  res.setHeader('Access-Control-Allow-Origin','*');
+  res.setHeader('Access-Control-Allow-Methods','GET,POST,PUT,PATCH,DELETE,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers','Content-Type, Authorization');
+  next();
+})
 // Database Access
 mongoose.connect(process.env.DATABASE,{useNewUrlParser: true, useUnifiedTopology: true},()=>
   console.log('Database Connected')
