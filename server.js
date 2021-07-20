@@ -2,8 +2,10 @@ const express  = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const cors = require('cors');
-//const mongoDBsession = require('connect-mongodb-session')(session)
 const authRoute = require('./routes/Auth');
+const itemsRoute =require('./routes/Items');
+
+//const mongoDBsession = require('connect-mongodb-session')(session)
 
 const app = express();
 require('dotenv').config();
@@ -16,6 +18,7 @@ const port = process.env.PORT || 5000
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cors());
+//app.use(methodOverride('_method'));
 
 // midleware route
 //app.use(
@@ -26,13 +29,17 @@ app.use(cors());
 //  })
 //)
 
-app.use('/user',authRoute);
 app.use((req,res, next)=>{
   res.setHeader('Access-Control-Allow-Origin','*');
   res.setHeader('Access-Control-Allow-Methods','GET,POST,PUT,PATCH,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers','Content-Type, Authorization');
   next();
 })
+
+
+app.use('/user',authRoute);
+app.use('/items',itemsRoute);
+
 // Database Access
 mongoose.connect(process.env.DATABASE,{useNewUrlParser: true, useUnifiedTopology: true},()=>
   console.log('Database Connected')

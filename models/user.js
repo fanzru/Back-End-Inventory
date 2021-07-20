@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 //const Sequelize = require('sequelize');
 const newSchema = new mongoose.Schema({
+    //_id: false,
+    //userId: {
+    //    type: String,
+    //    unique: true,
+    //    required: true
+    //},
     fullname:{
         type: String,
         required: true
