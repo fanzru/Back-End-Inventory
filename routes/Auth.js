@@ -12,7 +12,7 @@ router.get('/',(req,res)=>{
 router.post('/register',async(req,res)=>{
     // Validation for user input in api/user/register
     const {error} = RegisterValidation(req.body)
-    if(error) return res.json({
+    if(error) return res.status(400).json({
         status: 400,
         message: error.details[0].message,
         error: error
@@ -20,7 +20,7 @@ router.post('/register',async(req,res)=>{
     
     // check email in database
     const emailExist = await USER.findOne({email: req.body.email})
-    if(emailExist) return res.json({
+    if(emailExist) return res.status(400).json({
         status: 400,
         message: error.details[0].message,
         error: emailExist
