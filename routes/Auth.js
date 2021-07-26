@@ -99,7 +99,7 @@ router.post('/login',async(req,res)=> {
             token: token
         })
     } else {
-        res.header('Auth-Token',token)status(200).json({
+        res.header('Auth-Token',token).status(200).json({
             status: 200,
             message: "Login Success",
             type: 'User',
