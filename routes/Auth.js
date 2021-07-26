@@ -92,17 +92,18 @@ router.post('/login',async(req,res)=> {
     const token = jwt.sign({_id: userFound._id}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s'});
     
     if (userFound.email === 'adminlab@gmail.com' && realAdmin) {
-        res.header('auth-token',token).status(200).json({
+        res.header('Auth-Token',token).status(200).json({
             status: 200,
             message: "Login Success",
             type: 'Admin',
             token: token
         })
     } else {
-        res.status(200).json({
+        res.header('Auth-Token',token)status(200).json({
             status: 200,
             message: "Login Success",
             type: 'User',
+            token: token
         })
     
     }
