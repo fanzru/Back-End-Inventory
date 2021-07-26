@@ -21,6 +21,15 @@ POST http://localhost:5000/user/login
 Content-Type: application/json
 Authorization: 
 {
-    "email": "affan@gmail.com",
-    "password": "111222333"
+    "email": "Admin@gmail.com",
+    "password": "Admin"
+}
+
+###
+
+POST http://localhost:5000/user/login
+Content-Type: application/json
+{
+    "email": "Admin@gmail.com",
+    "password": "Admin"
 }

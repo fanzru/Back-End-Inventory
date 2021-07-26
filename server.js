@@ -36,7 +36,6 @@ app.use((req,res, next)=>{
   next();
 })
 
-
 app.use('/user',authRoute);
 app.use('/items',itemsRoute);
 

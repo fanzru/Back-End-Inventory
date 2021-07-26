@@ -39,8 +39,7 @@ router.post('/register',async(req,res)=>{
         phoneNumber: req.body.phoneNumber,
         homeAddress: req.body.homeAddress,
         email: req.body.email,
-        password: hashedPassword,
-        aslab: req.body.aslab
+        password: hashedPassword
     });
     
     try{
@@ -61,7 +60,12 @@ router.post('/register',async(req,res)=>{
 });
 
 router.post('/login',async(req,res)=> {
+    let realAdmin = false;
     
+    if (req.body.email === 'adminlab@gmail.com' && req.body.password === 'adminlab') {
+        realAdmin = true;
+    }
+
     // Validation for user input in api/user/register
     const {error} = LoginValidation(req.body)
     if(error) return res.status(400).json({
@@ -85,12 +89,22 @@ router.post('/login',async(req,res)=> {
     })
     
     // token auth
-    //const token = jwt.sign({_id: userFound._id}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s'});
-    //res.header('auth-token',token).send(token);
+    const token = jwt.sign({_id: userFound._id}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s'});
     
-    res.status(200).json({
-        status: 200,
-        message: "Login Success"
-    })
+    if (userFound.email === 'adminlab@gmail.com' && realAdmin) {
+        res.header('auth-token',token).status(200).json({
+            status: 200,
+            message: "Login Success",
+            type: 'Admin',
+            token: token
+        })
+    } else {
+        res.status(200).json({
+            status: 200,
+            message: "Login Success",
+            type: 'User',
+        })
+    
+    }
 })
 module.exports = router;
