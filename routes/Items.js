@@ -46,7 +46,17 @@ router.post('/inputnewItem',async (req,res)=>{
     
 })
 
-router.get('/findItemByName',(req,res)=>{
-    
+router.get('/findItemByName/:itemName',async (req,res)=>{
+    const Item = await ITEMS.findOne({itemName: req.params.itemName});
+    if (Item != null) return res.status(200).json({
+        status:200,
+        massage: 'Search Data Succes',
+        details: Item
+    });
+        
+    res.status(400).json({
+        status:400,
+        massage: `${req.params.itemName} Not Found`
+    })
 })
 module.exports = router;
