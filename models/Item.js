@@ -3,18 +3,15 @@ const mongoose = require('mongoose');
 const newSchema = new mongoose.Schema({
     itemName: {
         type: String,
-        required: true
+        required: true,
+        uppercase: true
     },
-    amountItems: {
+    itemAmount: {
         type: Number,
         required: true,
     },
-    status:{
-        type: Boolean,
-        required: true
-    },
-    imagesItem:{
-        type: String,
+    itemInBorrow:{
+        type: Number,
         required: true
     }
 });
