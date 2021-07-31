@@ -18,13 +18,11 @@ router.get('/',async (req,res)=>{
 })
 
 router.post('/inputnewItem',async (req,res)=>{
-    
     const itemExist = await ITEMS.findOne({itemName: req.body.itemName});
     if (itemExist) return res.status(400).json({
         status:400,
         message: 'Item Already Exist'
     })
-
     const newItem = new ITEMS({
         itemName: req.body.itemName,
         itemAmount: req.body.itemAmount,
