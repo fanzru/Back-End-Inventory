@@ -57,4 +57,8 @@ router.get('/findItemByName/:itemName',async (req,res)=>{
         massage: `${req.params.itemName} Not Found`
     })
 })
+
+router.patch('/addStockItem',(req,res)=>{
+    
+})
 module.exports = router;

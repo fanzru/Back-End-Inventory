@@ -12,7 +12,7 @@ npm install @hapi/joi
 npm install --save-nodemon  
 npm install dotenv
 npm install mongoose
-
+npm install nanoid
 ## reference
 - Joi Documentation      : https://www.npmjs.com/package/@hapi/joi
 - findOne Documentation  : https://docs.mongodb.com/drivers/node/usage-examples/findOne/

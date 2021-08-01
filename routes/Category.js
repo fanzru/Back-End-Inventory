@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const CATEGORY = require('../models/category');
 
+
 // Add Category
 router.post('/addCategory',async (req,res)=>{
     const categoryExist = await CATEGORY.findOne({categoryName: req.body.categoryName});
