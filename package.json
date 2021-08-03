@@ -29,6 +29,8 @@
     "express-session": "^1.17.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.13.2",
+    "mongoose-double": "0.0.1",
+    "mongoose-int32": "^0.5.0",
     "nanoid": "^3.1.23",
     "sequelize": "^6.6.5"
   },

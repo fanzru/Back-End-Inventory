@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+require('mongoose-double')(mongoose);
+const SchemaTypes = mongoose.Schema.Types;
+
 //const Sequelize = require('sequelize');
 const newSchema = new mongoose.Schema({
     itemName: {
@@ -7,8 +10,9 @@ const newSchema = new mongoose.Schema({
         uppercase: true
     },
     itemAmount: {
-        type: Number,
+        type: Number ,
         required: true,
+        
     },
     itemInBorrow:{
         type: Number,
