@@ -68,7 +68,7 @@ router.post('/login',async(req,res)=> {
 
     // Validation for user input in api/user/register
     const {error} = LoginValidation(req.body)
-    if(error) return res.status(400).json({
+    if (error) return res.status(400).json({
         status: 400,
         message: error.details[0].message,
         error: error

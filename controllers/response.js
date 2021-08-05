@@ -1,10 +1,12 @@
 
-// contoh response 
-// "ok": true,
-// "message": "Semua data sudah ditampilkan",
-// "code": 200,
-// "data": []
-
+/*
+    contoh response 
+    
+    "ok": true,
+    "message": "Semua data sudah ditampilkan",
+    "code": 200,
+    "data": []
+*/
 const response = (res,status,data,message,code) => {
     let resData
     if (status) resData = data
@@ -18,12 +20,12 @@ const response = (res,status,data,message,code) => {
         code : code,
         data : resData
     }
-    console.log(response)
+    // console.log(response)
     res.status(code).send(response)
 }
 
-  // digunakan untuk membuat error baru
-    const customError  = (message , status) => {
+// digunakan untuk membuat error baru
+const customError  = (message , status) => {
         const err = new Error(message)
         err.status = status
         return err

@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-require('mongoose-double')(mongoose);
-const SchemaTypes = mongoose.Schema.Types;
 
 //const Sequelize = require('sequelize');
 const newSchema = new mongoose.Schema({
@@ -19,4 +17,5 @@ const newSchema = new mongoose.Schema({
         required: true
     }
 });
+
 module.exports = mongoose.model('Item',newSchema);
