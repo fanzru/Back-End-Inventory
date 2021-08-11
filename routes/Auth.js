@@ -2,9 +2,14 @@ const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt    = require('jsonwebtoken'); 
 const USER   = require('../models/user');
+const USERLOGIN = require('../models/userlogin')
 const {RegisterValidation,LoginValidation } = require('../validator/validationAuth')
 
+/*
 
+Malem ini dateline buat benerin auth putusin mau make jwt atau local save user
+
+*/
 router.get('/',(req,res)=>{
     res.send('Helloo')
 })
@@ -13,9 +18,10 @@ router.post('/register',async(req,res)=>{
     // Validation for user input in api/user/register
     const {error} = RegisterValidation(req.body)
     if(error) return res.status(400).json({
+        succes: false,
         status: 400,
         message: error.details[0].message,
-        error: error
+        data: error
     })
     
     // check email in database
@@ -44,12 +50,8 @@ router.post('/register',async(req,res)=>{
     
     try{
         const savedUser = await newUser.save();
-        res.status(200).json({
-            status: 200,
-            message: 'register success',
-            details: savedUser
-        })
-            
+        response(res,true,savedUser,'register success',200)
+        
     } catch(err) {
         res.status(400).json({
             status: 400,
@@ -89,21 +91,21 @@ router.post('/login',async(req,res)=> {
     })
     
     // token auth
-    const token = jwt.sign({_id: userFound._id}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s'});
-    
+    // const token = jwt.sign({_id: userFound._id}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s'});
+    // res.header('Auth-Token',token).
     if (userFound.email === 'adminlab@gmail.com' && realAdmin) {
-        res.header('Auth-Token',token).status(200).json({
+        res.status(200).json({
             status: 200,
             message: "Login Success",
             type: 'Admin',
-            token: token
+            details: userFound
         })
     } else {
-        res.header('Auth-Token',token).status(200).json({
+        res.status(200).json({
             status: 200,
             message: "Login Success",
             type: 'User',
-            token: token
+            details: userFound
         })
     
     }
