@@ -13,16 +13,17 @@ Content-Type: application/json
     "phoneNumber": "08132616333",
     "homeAddress": "Jakarta",
     "email": "affan@gmail.com",
-    "password": "111222333"
+    "password": "111222333",
+    "confirmPassword": "111111111"
 }
 
 ###
 POST http://localhost:5000/user/login
 Content-Type: application/json
-Authorization: 
+
 {
-    "email": "Admin@gmail.com",
-    "password": "Admin"
+    "email": "adminla@gmail.com",
+    "password": "Adminaaaaaa"
 }
 
 ###

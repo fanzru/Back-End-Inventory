@@ -3,7 +3,8 @@ const bcrypt = require('bcryptjs');
 const jwt    = require('jsonwebtoken'); 
 const USER   = require('../models/user');
 const {RegisterValidation,LoginValidation } = require('../validator/validationAuth')
-
+const handlererror = null
+const {response} = require('../controllers/response')
 /*
 
 Malem ini dateline buat benerin auth putusin mau make jwt atau local save user
@@ -16,25 +17,20 @@ router.get('/',(req,res)=>{
 router.post('/register',async(req,res)=>{
     // Validation for user input in api/user/register
     const {error} = RegisterValidation(req.body)
-    if(error) return res.status(400).json({
-        succes: false,
-        status: 400,
-        message: error.details[0].message,
-        data: error
-    })
-    
     // check email in database
     const emailExist = await USER.findOne({email: req.body.email})
-    if(emailExist) return res.status(400).json({
-        status: 400,
-        message: error.details[0].message,
-        error: emailExist
-    })
-
+    // check confirm password
+    
+    if(emailExist){
+        return response(res,false,emailExist,error.details[0].message,400)
+    } else if (error) {
+        return response(res,false,error,error.details[0].message,400)
+    }
+        
     // hash password to database
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.password,salt);
-    
+
     const newUser =  new USER({
         fullname: req.body.fullname,
         NIM: req.body.NIM,
@@ -52,11 +48,14 @@ router.post('/register',async(req,res)=>{
         response(res,true,savedUser,'register success',200)
         
     } catch(err) {
+        response(res,true,savedUser,'register success',200)
         res.status(400).json({
             status: 400,
             message: 'register failed'
         })
     }
+    
+    
     
 });
 
@@ -66,7 +65,7 @@ router.post('/login',async(req,res)=> {
     if (req.body.email === 'adminlab@gmail.com' && req.body.password === 'adminlab') {
         realAdmin = true;
     }
-
+    
     // Validation for user input in api/user/register
     const {error} = LoginValidation(req.body)
     if (error) return res.status(400).json({
