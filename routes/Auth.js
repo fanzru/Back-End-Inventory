@@ -2,7 +2,6 @@ const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt    = require('jsonwebtoken'); 
 const USER   = require('../models/user');
-const USERLOGIN = require('../models/userlogin')
 const {RegisterValidation,LoginValidation } = require('../validator/validationAuth')
 
 /*
@@ -93,6 +92,8 @@ router.post('/login',async(req,res)=> {
     // token auth
     // const token = jwt.sign({_id: userFound._id}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s'});
     // res.header('Auth-Token',token).
+
+    
     if (userFound.email === 'adminlab@gmail.com' && realAdmin) {
         res.status(200).json({
             status: 200,

@@ -2,28 +2,50 @@ const router = require('express').Router();
 const ITEMS   = require('../models/Item');
 const {response} = require('../controllers/response')
 // Get all Data
+const error = null
 router.get('/',async (req,res)=>{
     try {
         const items = await ITEMS.find();
         response(res,true,items,'Get All Items Succes',200)
     } catch{
-        response(res,false,items,'Item Not Found',400)
+        response(res,false,error,'Item Not Found',400)
     }
 })
 // Input New item
 router.post('/inputnewItem',async (req,res)=>{
+    let kode = "BRG-"
+    let itemCode = kode + 0
+    var lastDoc = await ITEMS.find().sort({_id: -1}).limit(1);
+    
+    if (ITEMS != null){
+        console.log(lastDoc[0].itemCode)
+        var code = (lastDoc[0].itemCode).split("-")
+        console.log(code)
+        var noid = parseInt(code[1]) + 1
+        itemCode = kode +  noid
+    }
+
     const itemExist = await ITEMS.findOne({itemName: req.body.itemName});
-    if (itemExist) return response(res,false,itemExist,'Item Already Exist',400)
+    if (itemExist) return response(res,false,lastDoc,'Item Already Exist',400)
+    
+    
+    console.log(itemCode)
     const newItem = new ITEMS({
+        categoryId: "affan",
         itemName: req.body.itemName,
+        itemCode: itemCode,
         itemAmount: req.body.itemAmount,
         itemInBorrow: 0,
     })
+    
+    //console.log(newItem)
+
     try{
         const savedItem = await newItem.save();
+        console.log(savedItem)
         response(res,true,savedItem,'Input Item Succes',200)
     } catch {
-        response(res,false,savedItem,'Input Item Failed',400)
+        response(res,false,error,'Input Item Failed',400)
     }
     
 })
@@ -45,7 +67,7 @@ router.patch('/renameItem/:itemid',async (req,res)=>{
         });
         response(res,true,updateItem,'Update Success',200)
     } catch {
-        response(res,false,updateItem,`${req.params.itemid} Not Found`,400)
+        response(res,false,error,`${req.params.itemid} Not Found`,400)
     }
 })
 // delete item using item id
@@ -54,7 +76,7 @@ router.delete('/deleteItem/:itemid', async (req,res)=>{
         const deleteItem = await ITEMS.remove({_id: req.params.itemid});
         response(res,true,deleteItem,'delete item success',200)
     } catch{
-        response(res,false,deleteItem,'delete item failed',400)
+        response(res,false,error,'delete item failed',400)
     }
 })
 
@@ -70,7 +92,7 @@ router.post('/minItem/:itemid/:amountitem', async (req,res)=> {
             response(res,false,savedItem,'item not enough',400)
         }
     } catch {
-        response(res,false,savedItem,'item not found',400)
+        response(res,false,error,'item not found',400)
     }
 })
 
@@ -83,10 +105,10 @@ router.post('/addItem/:itemid/:amountitem', async (req,res)=> {
             const savedItem = await item.save();
             response(res,true,savedItem,'Return Item Succes',200)
         } else if (item!= null){
-            response(res,false,savedItem,'item not enough',400)
+            response(res,false,error,'item not enough',400)
         }
     } catch {
-        response(res,false,savedItem,'item not found',400)
+        response(res,false,error,'item not found',400)
     }
 })
 

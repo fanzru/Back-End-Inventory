@@ -2,10 +2,17 @@ const mongoose = require('mongoose');
 
 //const Sequelize = require('sequelize');
 const newSchema = new mongoose.Schema({
+    categoryId: {
+        type: String,
+        required: true
+    },
+    itemCode: {
+        type: String,
+        require: true
+    },
     itemName: {
         type: String,
-        required: true,
-        uppercase: true
+        required: true
     },
     itemAmount: {
         type: Number ,

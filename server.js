@@ -4,7 +4,7 @@ const session = require('express-session');
 const cors = require('cors');
 const authRoute = require('./routes/Auth');
 const itemsRoute =require('./routes/Items');
-const category = require('./models/category');
+
 const categoryRoute = require('./routes/Category')
 //const mongoDBsession = require('connect-mongodb-session')(session)
 
@@ -39,7 +39,7 @@ app.use((req,res, next)=>{
 
 app.use('/user',authRoute);
 app.use('/items',itemsRoute);
-app.use('/category',categoryRoute)
+app.use('/category',categoryRoute);
 
 // Database Access
 mongoose.connect(process.env.DATABASE,{useNewUrlParser: true, useUnifiedTopology: true},()=>
