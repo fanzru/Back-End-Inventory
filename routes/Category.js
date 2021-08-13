@@ -31,6 +31,10 @@ router.post('/addCategory',async (req,res)=>{
 
 router.get('/searchCategory/:categoryId',async (req,res)=> {
     try {
+        const CategoryExist = await CATEGORY.findOne({_id: req.params.categoryId})
+        if (!CategoryExist){
+            return response(res,false,error,'Category Not Found',400)
+        }
         const Category = await CATEGORY.findOne({_id: req.params.categoryId});
         if (Category != null) return response(res,true,Category,'Category Already',200)
     } catch {
@@ -38,6 +42,13 @@ router.get('/searchCategory/:categoryId',async (req,res)=> {
     }
 })
 
-router.delete('/deleteCategory/:categoryId')
-//router.delete()
+router.delete('/deleteCategory/:categoryId', async (req,res)=> {
+    try {
+        const deleteCategory = await CATEGORY.deleteOne({_id: req.params.categoryId})
+        response(res,true,deleteCategory,'Delete Category Success',200)
+    } catch {
+        response(res,false,error,'Delete Category Failed',400)
+    }
+})
+
 module.exports = router;

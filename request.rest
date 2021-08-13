@@ -33,3 +33,18 @@ Content-Type: application/json
     "email": "Admin@gmail.com",
     "password": "Admin"
 }
+###
+GET  http://localhost:5000/category
+Content-Type: application/json
+
+{
+    
+}
+
+###
+DELETE http://localhost:5000/category/deleteCategory/61058de11ce8932124677e73
+Content-Type: application/json 
+
+{
+
+}
