@@ -5,13 +5,19 @@ const USER   = require('../models/user');
 const {RegisterValidation,LoginValidation } = require('../validator/validationAuth')
 const handlererror = null
 const {response} = require('../controllers/response')
+const error = null
 /*
 
 Malem ini dateline buat benerin auth putusin mau make jwt atau local save user
 
 */
-router.get('/',(req,res)=>{
-    res.send('Helloo')
+router.get('/',async (req,res)=>{
+    const listuser = await USER.find();
+    try {
+        response(res,true,listuser,'Get All User Succes',200)
+    } catch {
+        response(res,false,error,'Faild Get Data',400)
+    }
 })
 
 router.post('/register',async(req,res)=>{

@@ -50,7 +50,7 @@ Content-Type: application/json
 
 }
 ### 
-PATCH  http://localhost:5000/category/61058df29c209b214cbeb5db
+POST http://localhost:5000/category/61058df29c209b214cbeb5db
 Content-Type: application/json
 {
     "categoryName": "Affan Ganteng"

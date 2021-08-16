@@ -11,7 +11,7 @@ const newSchema = new mongoose.Schema({
         type: String ,
         required: true,
     },
-    itemInBorrow:{
+    itemBorrow:{
         type: Number,
         required: true
     },

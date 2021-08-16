@@ -1,6 +1,7 @@
-let str = {
-    "nama": "affan",
-    "nim": "1301194175"
-}
+const d = new Date();
+let year = d.getFullYear()
+let month = d.getMonth()
+let day = d.getDate()
 
-console.log(typeof(str))
+let date = new Date().toISOString().split('T')[0];
+console.log(date)
