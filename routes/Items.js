@@ -18,20 +18,16 @@ router.post('/inputnewItem',async (req,res)=>{
     var lastDoc = await ITEMS.find().sort({_id: -1}).limit(1);
     
     if (ITEMS != null){
-        console.log(lastDoc[0].itemCode)
         var code = (lastDoc[0].itemCode).split("-")
-        console.log(code)
         var noid = parseInt(code[1]) + 1
         itemCode = kode +  noid
     }
 
     const itemExist = await ITEMS.findOne({itemName: req.body.itemName});
     if (itemExist) return response(res,false,lastDoc,'Item Already Exist',400)
-    
-    
-    console.log(itemCode)
+
     const newItem = new ITEMS({
-        categoryId: "affan",
+        categoryId: req.body.categoryId,
         itemName: req.body.itemName,
         itemCode: itemCode,
         itemAmount: req.body.itemAmount,
@@ -80,7 +76,7 @@ router.delete('/deleteItem/:itemid', async (req,res)=>{
     }
 })
 
-router.patch('/minItem/:itemid/:amountitem', async (req,res)=> {
+router.post('/minItem/:itemid/:amountitem', async (req,res)=> {
     try{
         const item = await ITEMS.findOne({_id: req.params.itemid});
         if ( (item!= null) &&  (item.itemAmount >= req.params.amountitem) && ((parseInt(item.itemInBorrow) - parseInt(req.params.amountitem)) >= 0)){
@@ -96,7 +92,7 @@ router.patch('/minItem/:itemid/:amountitem', async (req,res)=> {
     }
 })
 
-router.patch('/addItem/:itemid/:amountitem', async (req,res)=> {
+router.post('/addItem/:itemid/:amountitem', async (req,res)=> {
     try{
         const item = await ITEMS.findOne({_id: req.params.itemid});
         if ( (item!= null) &&  (item.itemAmount >= req.params.amountitem) && ((parseInt(item.itemInBorrow) - parseInt(req.params.amountitem)) >= 0)){
@@ -112,4 +108,11 @@ router.patch('/addItem/:itemid/:amountitem', async (req,res)=> {
     }
 })
 
+router.patch('/updateItem/:itemid', async (req,res)=> {
+    try {
+        const item = await ITEMS.findOne({_id: req.params.itemid});
+    } catch {
+        response(res,false,error,'item not found',400)
+    }
+})
 module.exports = router;

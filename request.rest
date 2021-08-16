@@ -12,9 +12,9 @@ Content-Type: application/json
     "year": "2019",
     "phoneNumber": "08132616333",
     "homeAddress": "Jakarta",
-    "email": "affan@gmail.com",
+    "email": "affanaaa@gmail.com",
     "password": "111222333",
-    "confirmPassword": "111111111"
+    "confirmPassword": "111222333"
 }
 
 ###
@@ -48,4 +48,10 @@ Content-Type: application/json
 
 {
 
+}
+### 
+PATCH  http://localhost:5000/category/61058df29c209b214cbeb5db
+Content-Type: application/json
+{
+    "categoryName": "Affan Ganteng"
 }

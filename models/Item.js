@@ -12,7 +12,8 @@ const newSchema = new mongoose.Schema({
     },
     itemName: {
         type: String,
-        required: true
+        required: true,
+        uppercase: true
     },
     itemAmount: {
         type: Number ,
