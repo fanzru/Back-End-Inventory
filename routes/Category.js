@@ -51,7 +51,7 @@ router.delete('/deleteCategory/:categoryId', async (req,res)=> {
     }
 })
 
-router.patch('/updateCategory/:categoryId', async (req,res)=> {
+router.post('/updateCategory/:categoryId', async (req,res)=> {
     const category = await CATEGORY.findOne({_id: req.params.categoryId})
     if (category === null) {
         return response(res,false,error,'Category Not Found',400)
