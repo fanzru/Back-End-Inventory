@@ -34,7 +34,6 @@ router.post('/inputnewItem',async (req,res)=>{
         itemInBorrow: 0,
     })
     
-
     try{
         const savedItem = await newItem.save();
         response(res,true,savedItem,'Input Item Succes',200)
@@ -53,7 +52,7 @@ router.get('/findItem/:itemid',async (req,res)=>{
     }
 })
 // rename item using item id
-router.patch('/renameItem/:itemid',async (req,res)=>{
+router.post('/renameItem/:itemid',async (req,res)=>{
     try {
         const updateItem = await ITEMS.updateOne(
             {_id: req.params.itemid}, 
@@ -74,7 +73,7 @@ router.delete('/deleteItem/:itemid', async (req,res)=>{
     }
 })
 
-router.patch('/minItem/:itemid/:amountitem', async (req,res)=> {
+router.post('/minItem/:itemid/:amountitem', async (req,res)=> {
     try{
         const item = await ITEMS.findOne({_id: req.params.itemid});
         if ( (item!= null) &&  (item.itemAmount >= req.params.amountitem) && ((parseInt(item.itemInBorrow) - parseInt(req.params.amountitem)) >= 0)){
@@ -90,7 +89,7 @@ router.patch('/minItem/:itemid/:amountitem', async (req,res)=> {
     }
 })
 
-router.patch('/addItem/:itemid/:amountitem', async (req,res)=> {
+router.post('/addItem/:itemid/:amountitem', async (req,res)=> {
     try{
         const item = await ITEMS.findOne({_id: req.params.itemid});
         if ( (item!= null) &&  (item.itemAmount >= req.params.amountitem) && ((parseInt(item.itemInBorrow) - parseInt(req.params.amountitem)) >= 0)){
@@ -106,11 +105,4 @@ router.patch('/addItem/:itemid/:amountitem', async (req,res)=> {
     }
 })
 
-router.patch('/updateItem/:itemid', async (req,res)=> {
-    try {
-        const item = await ITEMS.findOne({_id: req.params.itemid});
-    } catch {
-        response(res,false,error,'item not found',400)
-    }
-})
 module.exports = router;

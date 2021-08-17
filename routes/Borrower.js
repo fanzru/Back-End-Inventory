@@ -15,9 +15,11 @@ router.get('/',async (req,res)=>{
 })
 
 router.post('/requestItem', async (req,res)=>{
+    
     const date = new Date().toISOString().split('T')[0];
     const item = await ITEMS.findOne({_id: req.body.itemId})
     const user = await USER.findOne({_id: req.body.userId})
+    
     if (item === null) {
         return response(res,false,item,'item not found',400)
     } else if (user === null) {
@@ -25,6 +27,7 @@ router.post('/requestItem', async (req,res)=>{
     } else if (item.itemAmount < req.body.itemBorrow) {
         return response(res,false,item,'item not available',400)
     }
+
     const newRequest = new BORROWER({
         userId: req.body.userId,
         itemId: req.body.itemId,
@@ -35,6 +38,7 @@ router.post('/requestItem', async (req,res)=>{
         dateRequest: date,
         status: "in process"
     })
+
     try {
         const savedRequestBorrow = await newRequest.save();
         response(res,true,savedRequestBorrow,'Add Request Success',200)
@@ -43,7 +47,20 @@ router.post('/requestItem', async (req,res)=>{
     }
 })
 
-router.post('/changeStatus/:borrowId',async (req,res)=> {})
+router.post('/changeStatus/:borrowId',async (req,res)=> {
+    const borrower = await BORRORWER.findOne({_id: req.params.borrowId});
+    const item = await ITEMS.findOne({_id: borrower.itemId})
+    
+    if (borrower === null) return response(res,false,error,'Borrower Not Found',400)
 
+    if (req.body.status === 'Accept'){
+        
+    } else if (req.body.status === 'Returned'){
+        
+    } else {
+        response(res,false,error,'Status Not Compatible',400)
+    }
+
+})
 
 module.exports = router;
