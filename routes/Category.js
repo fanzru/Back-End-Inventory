@@ -56,7 +56,6 @@ router.post('/updateCategory/:categoryId', async (req,res)=> {
     if (category === null) {
         return response(res,false,error,'Category Not Found',400)
     }
-    
     try {
         const updateCategory = await CATEGORY.updateOne(
             {_id: req.params.categoryId}, 

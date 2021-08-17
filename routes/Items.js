@@ -17,12 +17,12 @@ router.post('/inputnewItem',async (req,res)=>{
     let itemCode = kode + 0
     var lastDoc = await ITEMS.find().sort({_id: -1}).limit(1);
     
-    if (ITEMS != null){
+    if (lastDoc.length != 0){
         var code = (lastDoc[0].itemCode).split("-")
         var noid = parseInt(code[1]) + 1
         itemCode = kode +  noid
     }
-
+    
     const itemExist = await ITEMS.findOne({itemName: req.body.itemName});
     if (itemExist) return response(res,false,lastDoc,'Item Already Exist',400)
 
