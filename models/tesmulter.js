@@ -4,6 +4,10 @@ const newSchema = new mongoose.Schema({
     namefile: {
         type: String,
         required: true
+    },
+    itemPicture: {
+        type: String,
+        required: true
     }
 });
 

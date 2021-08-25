@@ -68,8 +68,8 @@ router.post('/inputnewItem', async (req, res) => {
 router.get('/findItem/:itemid', async (req, res) => {
   try {
     const Item = await ITEMS.findOne({ _id: req.params.itemid })
-    if (Item != null)
-      return response(res, true, Item, 'Search Data Succes', 200)
+    if (Item == null) return response(res, false, Item, `${req.params.itemid} Not Found`, 400)
+    response(res, true, Item, 'Search Data Succes', 200)
   } catch {
     response(res, false, Item, `${req.params.itemid} Not Found`, 400)
   }

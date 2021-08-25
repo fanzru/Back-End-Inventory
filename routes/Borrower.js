@@ -6,8 +6,46 @@ const {response} = require('../controllers/response');
 const error = null
 
 router.get('/',async (req,res)=>{
-    const listborrower = await BORROWER.find();
+    const listborrower = await BORROWER.aggregate([
+        {
+          $lookup: {
+            from: USER.collection.name ,
+            let: {
+              userId: { $toObjectId: '$userId' },
+            },
+            as: 'detailUser',
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $eq: ['$$userId','$_id' ], 
+                  },
+                },
+              },
+            ],
+          },
+        },
+        {
+            $lookup: {
+              from: ITEMS.collection.name ,
+              let: {
+                itemId: { $toObjectId: '$itemId' },
+              },
+              as: 'detailItem',
+              pipeline: [
+                {
+                  $match: {
+                    $expr: {
+                      $eq: ['$_id','$$itemId' ], 
+                    },
+                  },
+                },
+              ],
+            },
+          },
+      ])
     try {
+        
         response(res,true,listborrower,'Get All Borrower Request Succes',200)
     } catch {
         response(res,false,error,'Faild Get Data',400)
@@ -89,5 +127,7 @@ router.post('/changeStatus/:borrowId',async (req,res)=> {
         response(res,false,error,'Change Status Failed',400)
     }
 })
+
+router.delete('/delete/:borrowID')
 
 module.exports = router;
