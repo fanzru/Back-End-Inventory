@@ -56,12 +56,12 @@ router.post('/requestItem', async (req,res)=>{
     const date = new Date().toISOString().split('T')[0];
     const item = await ITEMS.findOne({_id: req.body.itemId})
     const user = await USER.findOne({_id: req.body.userId})
+   
     let kode = 'PNJ-'
     let itemCode = kode + 0
     var lastDoc = await BORROWER.find().sort({ _id: -1 }).limit(1)
-
     if (lastDoc.length != 0) {
-        var code = lastDoc[0].itemCode.split('-')
+        var code = lastDoc[0].borrowId.split('-')
         var noid = parseInt(code[1]) + 1
         itemCode = kode + noid
     }

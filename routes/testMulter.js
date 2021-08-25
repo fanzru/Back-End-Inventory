@@ -12,21 +12,17 @@ router.get('/',async (req,res)=>{
         response(res, false, items, 'Get All Items Failed', 400)
     }
 })
-router.post('/upload',upload.single('itemPicture'), async (req,res)=> {
-    const file = new MULTER ({
-        namefile: req.body.namefile
+router.post('/upload',upload.single('itemPicture'), async (req,res,next)=> {
+    const file = new MULTER({
+        namefile: req.body.namefile,
+        itemPicture: req.file.path
     })
-    
-    if(req.file){
-        file.path = req.file.path
-    }
-    const saveFile = await file.save()
-    console.log(saveFile)
+    console.log(file)
     try {
-        
+        const saveFile = await file.save()
         response(res, true, saveFile, 'Alhamdulillah bisa tidur', 200)
     } catch {
-        response(res, false, error, 'Add Item Failed', 400)
+        response(res, false, error, 'Add Item Failed', 400) 
     }
 })
 

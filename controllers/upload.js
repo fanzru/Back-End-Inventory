@@ -20,6 +20,9 @@ const upload = multer ({
             console.log('Only jpg & png file supported!')
             callback(null,false)
         }
+    },
+    limits: {
+        fileSize: 1024 * 1024 * 2
     }
 })
 
