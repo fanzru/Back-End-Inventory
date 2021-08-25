@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const { customError } = require('./wrap')
+// const { customError } = require('./wrap')
 // const mongoose = require('mongoose')
 
 require('dotenv').config()

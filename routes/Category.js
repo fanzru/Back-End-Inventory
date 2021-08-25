@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const CATEGORY = require('../models/category');
-const error = null
+const ITEMS = require('../models/Item');
+const error = null;
 const {response} = require('../controllers/response')
 // Add Category
 
@@ -44,6 +45,8 @@ router.get('/searchCategory/:categoryId',async (req,res)=> {
 
 router.delete('/deleteCategory/:categoryId', async (req,res)=> {
     try {
+        const cekCategory = await ITEMS.findById({categoryId: req.params.categoryId})
+        if (cekCategory.length == 0) return response(res,false,error,'Category Has Been Used in Item',400)
         const deleteCategory = await CATEGORY.deleteOne({_id: req.params.categoryId})
         response(res,true,deleteCategory,'Delete Category Success',200)
     } catch {

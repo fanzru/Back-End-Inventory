@@ -13,3 +13,10 @@ if (a.length === 0){
 } else {
     console.log(11)
 }
+
+let z = "10"
+let b = Number(z)
+console.log('------------------------------')
+if('10'< parseInt('100')){
+    console.log("Ananda")
+}

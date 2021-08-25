@@ -1,5 +1,6 @@
-const router = require('express').Router();
-const ITEMS   = require('../models/Item');
+const router     = require('express').Router();
+const ITEMS      = require('../models/Item');
+const BORROWER   = require('../models/borrower')
 const {response} = require('../controllers/response')
 // Get all Data
 const error = null
@@ -66,6 +67,9 @@ router.post('/renameItem/:itemid',async (req,res)=>{
 // delete item using item id
 router.delete('/deleteItem/:itemid', async (req,res)=>{
     try{
+        const dataBorrower = await BORROWER.findOne({itemId: req.params.itemid});
+        if (dataBorrower.length == 0) return response(res,false,error,'delete item failed',400)
+        
         const deleteItem = await ITEMS.remove({_id: req.params.itemid});
         response(res,true,deleteItem,'delete item success',200)
     } catch{
@@ -74,31 +78,27 @@ router.delete('/deleteItem/:itemid', async (req,res)=>{
 })
 
 router.post('/minItem/:itemid/:amountitem', async (req,res)=> {
+    
     try{
         const item = await ITEMS.findOne({_id: req.params.itemid});
-        if ( (item!= null) &&  (item.itemAmount >= req.params.amountitem) && ((parseInt(item.itemInBorrow) - parseInt(req.params.amountitem)) >= 0)){
-            item.itemAmount   += parseInt(req.params.amountitem)
-            item.itemInBorrow -= parseInt(req.params.amountitem)
+        console.log(typeof(item.itemAmount),typeof(itemAmount))
+        if ( (item.length != 0) &&  (item.itemAmount >= itemAmount) ){
+            item.itemAmount   -= parseInt(req.params.amountitem)
             const savedItem = await item.save();
-            response(res,true,savedItem,'Return Item Succes',200)
-        } else if (item!= null){
-            response(res,false,savedItem,'item not enough',400)
+            response(res,true,savedItem,'Min Item Succes',200)
         }
     } catch {
-        response(res,false,error,'item not found',400)
+        response(res,false,error,'Min Item Failed',400)
     }
 })
 
 router.post('/addItem/:itemid/:amountitem', async (req,res)=> {
     try{
         const item = await ITEMS.findOne({_id: req.params.itemid});
-        if ( (item!= null) &&  (item.itemAmount >= req.params.amountitem) && ((parseInt(item.itemInBorrow) - parseInt(req.params.amountitem)) >= 0)){
-            item.itemAmount   -= parseInt(req.params.amountitem)
-            item.itemInBorrow += parseInt(req.params.amountitem)
+        if ( (item.length != 0 ) &&  ( 1 <= req.params.amountitem)){
+            item.itemAmount  += parseInt(req.params.amountitem)
             const savedItem = await item.save();
             response(res,true,savedItem,'Return Item Succes',200)
-        } else if (item!= null){
-            response(res,false,error,'item not enough',400)
         }
     } catch {
         response(res,false,error,'item not found',400)

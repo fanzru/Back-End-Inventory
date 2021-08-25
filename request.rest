@@ -35,7 +35,7 @@ Content-Type: application/json
     "password": "Admin"
 }
 ###
-GET  http://localhost:5000/category
+GET  http://localhost:5000/borrower
 Content-Type: application/json
 
 {

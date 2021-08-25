@@ -48,19 +48,33 @@ router.post('/requestItem', async (req,res)=>{
 })
 
 router.post('/changeStatus/:borrowId',async (req,res)=> {
-    const borrower = await BORRORWER.findOne({_id: req.params.borrowId});
-    const item = await ITEMS.findOne({_id: borrower.itemId})
-    
-    if (borrower === null) return response(res,false,error,'Borrower Not Found',400)
-
-    if (req.body.status === 'Accept'){
-        
-    } else if (req.body.status === 'Returned'){
-        
+    const borrower = await BORROWER.findOne({_id: req.params.borrowId})
+    if (borrower.length != 0) {
+        const item = await ITEMS.findOne({_id: borrower.itemId})
+        try {
+            if ((req.body.status === 'Accepted') && (item.itemAmount >= borrower.itemBorrow) && (borrower.status == 'in process') ){
+                item.itemAmount -= parseInt(borrower.itemBorrow)
+                item.itemInBorrow += parseInt(borrower.itemBorrow)
+                borrower.status = 'Accepted'
+                const savedItem = await item.save();
+                const savedBorrower = await borrower.save();
+                return response(res,true,item,'Change Status Success',200)
+            } else if ((req.body.status === 'Returned') && (borrower.status == 'Accept')){
+                item.itemAmount += parseInt(borrower.itemBorrow)
+                item.itemInBorrow -= parseInt(borrower.itemBorrow)
+                borrower.status = 'Returned'
+                const savedItem = await item.save();
+                const savedBorrower = await borrower.save();
+                return response(res,true,item,'Change Status Success',200)
+            } else {
+                return response(res,false,error,'Status Not Compatible',400)
+            }
+        } catch {
+            response(res,false,error,'Change Status Failed',400)
+        }
     } else {
-        response(res,false,error,'Status Not Compatible',400)
+        response(res,false,error,'Change Status Failed',400)
     }
-
 })
 
 module.exports = router;
