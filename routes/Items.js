@@ -90,8 +90,8 @@ router.post('/renameItem/:itemid', async (req, res) => {
 router.delete('/deleteItem/:itemid', async (req, res) => {
   try {
     const dataBorrower = await BORROWER.findOne({ itemId: req.params.itemid })
-    if (dataBorrower.length == 0)
-      return response(res, false, error, 'delete item failed', 400)
+
+    if (dataBorrower != null) return response(res, false, error, 'delete item failed', 400)
 
     const deleteItem = await ITEMS.remove({ _id: req.params.itemid })
     response(res, true, deleteItem, 'delete item success', 200)
