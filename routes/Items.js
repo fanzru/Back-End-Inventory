@@ -81,6 +81,7 @@ router.post('/updateItem/:itemid', async (req, res) => {
     if (updateItem == null) return response(res, false, error, `item Not Found`, 400)
     updateItem.categoryId = req.body.categoryId
     updateItem.itemName   = req.body.itemName
+    updateItem.save()
     response(res, true, updateItem, 'Update Success', 200)
   } catch {
     response(res, false, error, `item Not Found`, 400)

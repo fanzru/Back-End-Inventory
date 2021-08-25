@@ -93,7 +93,7 @@ router.post('/requestItem', async (req,res)=>{
         response(res,false,newRequest,'Add Request Failed',400)
     }
 })
-
+// buat reject dan kalau belum di acc ga bisa kembali
 router.post('/changeStatus/:borrowId',async (req,res)=> {
     const borrower = await BORROWER.findOne({_id: req.params.borrowId})
     if (borrower.length != 0) {
