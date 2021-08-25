@@ -15,11 +15,19 @@ router.get('/',async (req,res)=>{
 })
 
 router.post('/requestItem', async (req,res)=>{
-    
     const date = new Date().toISOString().split('T')[0];
     const item = await ITEMS.findOne({_id: req.body.itemId})
     const user = await USER.findOne({_id: req.body.userId})
-    
+    let kode = 'PNJ-'
+    let itemCode = kode + 0
+    var lastDoc = await BORROWER.find().sort({ _id: -1 }).limit(1)
+
+    if (lastDoc.length != 0) {
+        var code = lastDoc[0].itemCode.split('-')
+        var noid = parseInt(code[1]) + 1
+        itemCode = kode + noid
+    }
+
     if (item === null) {
         return response(res,false,item,'item not found',400)
     } else if (user === null) {
@@ -29,6 +37,7 @@ router.post('/requestItem', async (req,res)=>{
     }
 
     const newRequest = new BORROWER({
+        borrowId: itemCode,
         userId: req.body.userId,
         itemId: req.body.itemId,
         itemBorrow: req.body.itemBorrow,
@@ -55,6 +64,8 @@ router.post('/changeStatus/:borrowId',async (req,res)=> {
             if ((req.body.status === 'Accepted') && (item.itemAmount >= borrower.itemBorrow) && (borrower.status == 'in process') ){
                 item.itemAmount -= parseInt(borrower.itemBorrow)
                 item.itemInBorrow += parseInt(borrower.itemBorrow)
+                let date = new Date().toISOString().split('T')[0];
+                borrower.dateBorrow = date
                 borrower.status = 'Accepted'
                 const savedItem = await item.save();
                 const savedBorrower = await borrower.save();
@@ -62,6 +73,8 @@ router.post('/changeStatus/:borrowId',async (req,res)=> {
             } else if ((req.body.status === 'Returned') && (borrower.status == 'Accept')){
                 item.itemAmount += parseInt(borrower.itemBorrow)
                 item.itemInBorrow -= parseInt(borrower.itemBorrow)
+                let date = new Date().toISOString().split('T')[0];
+                borrower.dateReturn = date
                 borrower.status = 'Returned'
                 const savedItem = await item.save();
                 const savedBorrower = await borrower.save();

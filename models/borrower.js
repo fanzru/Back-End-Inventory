@@ -2,10 +2,13 @@ const mongoose = require('mongoose');
 
 //const Sequelize = require('sequelize');
 const newSchema = new mongoose.Schema({
+    borrowId:{
+        type: String,
+        required: true
+    },
     userId: {
         type: String,
-        required: true,
-        uppercase: true
+        required: true
     },
     itemId: {
         type: String ,

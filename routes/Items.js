@@ -75,15 +75,15 @@ router.get('/findItem/:itemid', async (req, res) => {
   }
 })
 // rename item using item id
-router.post('/renameItem/:itemid', async (req, res) => {
+router.post('/updateItem/:itemid', async (req, res) => {
   try {
-    const updateItem = await ITEMS.updateOne(
-      { _id: req.params.itemid },
-      { $set: { itemName: req.body.itemName } },
-    )
+    const updateItem = await ITEMS.findOne({ _id: req.params.itemid })
+    if (updateItem == null) return response(res, false, error, `item Not Found`, 400)
+    updateItem.categoryId = req.body.categoryId
+    updateItem.itemName   = req.body.itemName
     response(res, true, updateItem, 'Update Success', 200)
   } catch {
-    response(res, false, error, `${req.params.itemid} Not Found`, 400)
+    response(res, false, error, `item Not Found`, 400)
   }
 })
 // delete item using item id

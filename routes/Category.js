@@ -45,8 +45,8 @@ router.get('/searchCategory/:categoryId',async (req,res)=> {
 
 router.delete('/deleteCategory/:categoryId', async (req,res)=> {
     try {
-        const cekCategory = await ITEMS.findById({categoryId: req.params.categoryId})
-        if (cekCategory.length != null) return response(res,false,error,'Category Has Been Used in Item',400)
+        const cekCategory = await ITEMS.findOne({categoryId: req.params.categoryId})
+        if (cekCategory != null) return response(res,false,error,'Category Has Been Used in Item',400)
         const deleteCategory = await CATEGORY.deleteOne({_id: req.params.categoryId})
         response(res,true,deleteCategory,'Delete Category Success',200)
     } catch {

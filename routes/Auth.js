@@ -6,11 +6,11 @@ const {RegisterValidation,LoginValidation } = require('../validator/validationAu
 const handlererror = null
 const {response} = require('../controllers/response')
 const error = null
+
 /*
-
 Malem ini dateline buat benerin auth putusin mau make jwt atau local save user
-
 */
+
 router.get('/',async (req,res)=>{
     const listuser = await USER.find();
     try {
@@ -53,25 +53,20 @@ router.post('/register',async(req,res)=>{
         const savedUser = await newUser.save();
         response(res,true,savedUser,'register success',200)
         
-    } catch(err) {
+    }catch(err) {
         response(res,true,savedUser,'register success',200)
         res.status(400).json({
             status: 400,
             message: 'register failed'
         })
     }
-    
-    
-    
 });
 
 router.post('/login',async(req,res)=> {
     let realAdmin = false;
-    
     if (req.body.email === 'adminlab@gmail.com' && req.body.password === 'adminlab') {
         realAdmin = true;
     }
-    
     // Validation for user input in api/user/register
     const {error} = LoginValidation(req.body)
     if (error) return res.status(400).json({
