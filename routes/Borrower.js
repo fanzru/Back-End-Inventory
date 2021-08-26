@@ -93,7 +93,7 @@ router.post('/requestItem', async (req,res)=>{
         response(res,false,newRequest,'Add Request Failed',400)
     }
 })
-// buat reject dan kalau belum di acc ga bisa kembali
+
 router.post('/changeStatus/:borrowId',async (req,res)=> {
     const borrower = await BORROWER.findOne({_id: req.params.borrowId})
     if (borrower.length != 0) {
@@ -117,6 +117,10 @@ router.post('/changeStatus/:borrowId',async (req,res)=> {
                 const savedItem = await item.save();
                 const savedBorrower = await borrower.save();
                 return response(res,true,item,'Change Status Success',200)
+            } else if ((req.body.status === 'Rejected') && (borrower.status == 'in process') ){
+                borrower.status = 'Rejected'
+                const savedBorrower = await borrower.save();
+                return response(res,true,savedBorrower,'Rejected Success',200)
             } else {
                 return response(res,false,error,'Status Not Compatible',400)
             }
