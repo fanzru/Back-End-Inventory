@@ -26,4 +26,5 @@ const newSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Item',newSchema);
+module.exports = mongoose.model('Item',newSchema
+);
