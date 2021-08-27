@@ -8,6 +8,10 @@ const newSchema = new mongoose.Schema({
     itemPicture: {
         type: String,
         required: true
+    },
+    url: {
+        type: String,
+        required: true
     }
 });
 

@@ -10,7 +10,6 @@ const storage = multer.diskStorage({
         cb(null,Date.now()+ext)
     }
 })
-
 const upload = multer ({
     storage: storage,
     fileFilter: function(req,file,callback){
@@ -25,5 +24,6 @@ const upload = multer ({
         fileSize: 1024 * 1024 * 2
     }
 })
+
 
 module.exports = upload 

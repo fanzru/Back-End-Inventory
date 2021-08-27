@@ -6,7 +6,7 @@ const {RegisterValidation,LoginValidation } = require('../validator/validationAu
 const handlererror = null
 const {response} = require('../controllers/response')
 const error = null
-const {authenticateToken,signUser} = require('../controllers/auth')
+const {signUser, authenticateToken} = require('../controllers/auth')
 let refreshTokens = []
 
 /*
@@ -116,7 +116,12 @@ router.post('/login',async(req,res)=> {
     }
 })
 
-router.get('/getdetailuser' , authenticateToken, (req, res) => {
+router.get('/getdetailuser', authenticateToken,(req, res) => {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    //console.log(token)
+    if (token === null) return next(customError('Authentication tidak ditemukan',401))
+    const user = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
     response(res, true, user, 'Get User Success', 200)
 })
 

@@ -3,6 +3,7 @@ const MULTER = require('../models/tesmulter');
 const upload = require('../controllers/upload');
 const { response } = require('../controllers/response')
 const error = null
+const {uploadImage } = require('../controllers/uploads')
 router.get('/',async (req,res)=>{
     try {
         const items = await MULTER.find()
@@ -12,11 +13,17 @@ router.get('/',async (req,res)=>{
     }
 })
 router.post('/upload',upload.single('itemPicture'), async (req,res,next)=> {
+    
+    let name = (req.file.path).split('/')
+    console.log(name)
+    const url = uploadImage(req.file.path,name[1])
+    
     const file = new MULTER({
         namefile: req.body.namefile,
-        itemPicture: req.file.path
+        itemPicture: req.file.path,
+        url: url
     })
-    console.log(file)
+    
     try {
         const saveFile = await file.save()
         response(res, true, saveFile, 'Alhamdulillah bisa tidur', 200)

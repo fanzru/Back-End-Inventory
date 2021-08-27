@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-
+const {customError} = require('../controllers/response');
 
 require('dotenv').config()
 
@@ -11,10 +11,10 @@ async function authenticateToken(req,res,next) {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
     console.log(token)
-    if (token == null) return next(customError('Authentication tidak ditemukan',401))
+    if (token === null) return next(customError('Authentication tidak ditemukan',401))
 
     jwt.verify(token, process.env.tokenSecret, (err,user) => {
-        if (err) return next(customError('Authentication has expired',419))
+        if (err) return next(customError('Authentication Error',419))
         req.user = user
         next()
     })
