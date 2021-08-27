@@ -1,11 +1,10 @@
 const jwt = require('jsonwebtoken')
-// const { customError } = require('./wrap')
-// const mongoose = require('mongoose')
+
 
 require('dotenv').config()
 
 function signUser(user) {
-    return jwt.sign(user, process.env.tokenSecret, { expiresIn: 60*30}) // 60detik * 30 = 30 menit
+    return jwt.sign({_id: user}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 60*30}) // 60detik * 30 = 30 menit
 }
 
 async function authenticateToken(req,res,next) {

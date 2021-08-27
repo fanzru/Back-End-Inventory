@@ -1,18 +1,20 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt    = require('jsonwebtoken'); 
-const USER   = require('../models/user');
+const USERS   = require('../models/user');
 const {RegisterValidation,LoginValidation } = require('../validator/validationAuth')
 const handlererror = null
 const {response} = require('../controllers/response')
 const error = null
+const {authenticateToken,signUser} = require('../controllers/auth')
+let refreshTokens = []
 
 /*
 Malem ini dateline buat benerin auth putusin mau make jwt atau local save user
 */
 
 router.get('/',async (req,res)=>{
-    const listuser = await USER.find();
+    const listuser = await USERS.find();
     try {
         response(res,true,listuser,'Get All User Succes',200)
     } catch {
@@ -24,7 +26,7 @@ router.post('/register',async(req,res)=>{
     // Validation for user input in api/user/register
     const {error} = RegisterValidation(req.body)
     // check email in database
-    const emailExist = await USER.findOne({email: req.body.email})
+    const emailExist = await USERS.findOne({email: req.body.email})
     // check confirm password
     
     if(emailExist){
@@ -37,7 +39,7 @@ router.post('/register',async(req,res)=>{
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.password,salt);
 
-    const newUser =  new USER({
+    const newUser =  new USERS({
         fullname: req.body.fullname,
         NIM: req.body.NIM,
         major: req.body.major,
@@ -76,7 +78,7 @@ router.post('/login',async(req,res)=> {
     })
     
     // check email in database
-    const userFound = await USER.findOne({email: req.body.email})
+    const userFound = await USERS.findOne({email: req.body.email})
     if(!userFound) return res.status(400).json({
         status: 400,
         message: "Email Not Found"
@@ -90,27 +92,33 @@ router.post('/login',async(req,res)=> {
     })
     
     // token auth
-    const token = jwt.sign({_id: userFound._id}, process.env.ACCESS_TOKEN_SECRET, {});
-    res.header('Auth-Token',token)
-
-    
+    //const token = jwt.sign({_id: userFound}, process.env.ACCESS_TOKEN_SECRET,{ expiresIn: '15s' });
+    //console.log(token)
+    //const refreshToken = jwt.sign({_id: userFound}, process.env.REFRESH_TOKEN_SECRET,{ expiresIn: '15s' })
+    //refreshTokens.push(refreshToken)
+    token = signUser(userFound)
     if (userFound.email === 'adminlab@gmail.com' && realAdmin) {
-        res.status(200).json({
+        res.header('authorization',token).status(200).json({
             status: 200,
             message: "Login Success",
             type: 'Admin',
-            details: userFound,
-            token: token
+            accessToken: token,
+            //refreshToken: refreshToken
         })
     } else {
-        res.status(200).json({
+        res.header('authorization',token).status(200).json({
             status: 200,
             message: "Login Success",
             type: 'User',
-            details: userFound,
-            token: token
+            accessToken: token,
+            //refreshToken: refreshToken
         })
-    
     }
 })
+
+router.get('/getdetailuser' , authenticateToken, (req, res) => {
+    response(res, true, user, 'Get User Success', 200)
+})
+
+
 module.exports = router;
