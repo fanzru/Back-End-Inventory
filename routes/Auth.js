@@ -99,14 +99,16 @@ router.post('/login',async(req,res)=> {
             status: 200,
             message: "Login Success",
             type: 'Admin',
-            details: token
+            details: userFound,
+            token: token
         })
     } else {
         res.status(200).json({
             status: 200,
             message: "Login Success",
             type: 'User',
-            details: token
+            details: userFound,
+            token: token
         })
     
     }
