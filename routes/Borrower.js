@@ -108,7 +108,7 @@ router.post('/changeStatus/:borrowId',async (req,res)=> {
                 const savedItem = await item.save();
                 const savedBorrower = await borrower.save();
                 return response(res,true,item,'Change Status Success',200)
-            } else if ((req.body.status === 'Returned') && (borrower.status == 'Accept')){
+            } else if ((req.body.status === 'Returned') && (borrower.status == 'Accepted')){
                 item.itemAmount += parseInt(borrower.itemBorrow)
                 item.itemInBorrow -= parseInt(borrower.itemBorrow)
                 let date = new Date().toISOString().split('T')[0];
