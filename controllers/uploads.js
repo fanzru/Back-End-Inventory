@@ -40,15 +40,15 @@ const fileFilter = (req,file,cb) => {
 // })
 
 async function uploadImage(file,name) {
-  const url = await cloudinary.v2.uploader.upload(file, {public_id: 'RPL_Inventory/barcode/'+name});
+    const url = await cloudinary.v2.uploader.upload(file, {public_id: 'RPL_Inventory/barcode/'+name});
+    console.log(url,'=================')
+    let paths = __dirname.split("/controllers")[0];
 
-  let paths = __dirname.split("/controllers")[0];
+    fs.unlink(`${paths}/uploads/${name}`, (err) => {
+        if(err) return null
+    });
   
-  fs.unlink(`${paths}/uploads/${name}`, (err) => {
-    if(err) return null
-  });
-  
-  return url
+    return url
 }
 
 module.exports = {

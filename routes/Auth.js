@@ -116,7 +116,7 @@ router.post('/login',async(req,res)=> {
     }
 })
 
-router.get('/getdetailuser', authenticateToken,(req, res) => {
+router.get('/getdetailuser',(req, res) => {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
     //console.log(token)

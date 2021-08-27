@@ -23,7 +23,7 @@ router.post('/upload',upload.single('itemPicture'), async (req,res,next)=> {
         itemPicture: req.file.path,
         url: url
     })
-    
+    console.log(file)
     try {
         const saveFile = await file.save()
         response(res, true, saveFile, 'Alhamdulillah bisa tidur', 200)
