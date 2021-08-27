@@ -63,6 +63,7 @@ router.post('/inputnewItem', async (req, res) => {
   } catch {
     response(res, false, error, 'Input Item Failed', 400)
   }
+  
 })
 // get item using id item
 router.get('/findItem/:itemid', async (req, res) => {
