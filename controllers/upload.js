@@ -1,5 +1,10 @@
 const path = require('path');
 const multer = require('multer');
+const cloudinaryStorage = require('multer-storage-cloudinary')
+const cloudinary = require('../config/cloudinary')
+const fs = require('fs');
+
+
 
 const storage = multer.diskStorage({
     destination: function(req,file,cb){
@@ -25,5 +30,18 @@ const upload = multer ({
     }
 })
 
+async function uploadImage(file,name) {
+    const url = await cloudinary.v2.uploader.upload(file, {public_id: 'RPL_Inventory/barcode/'+name});
+    
+    let paths = __dirname.split("/controllers")[0];
 
-module.exports = upload 
+    fs.unlink(`${paths}/uploads/${name}`, (err) => {
+        if(err) return null
+    });
+    console.log(url.url,'=================')
+    return url.url
+}
+
+module.exports = {
+  uploadImage, upload
+} 

@@ -13,7 +13,7 @@ async function authenticateToken(req,res,next) {
     console.log(token)
     if (token === null) return next(customError('Authentication tidak ditemukan',401))
 
-    jwt.verify(token, process.env.tokenSecret, (err,user) => {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err,user) => {
         if (err) return next(customError('Authentication Error',419))
         req.user = user
         next()

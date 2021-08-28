@@ -30,6 +30,10 @@ const newSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    guaranteePicture:{
+        type: String,
+        require: true
+    },
     dateRequest: {
         type: String,
         required: true

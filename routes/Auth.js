@@ -116,13 +116,13 @@ router.post('/login',async(req,res)=> {
     }
 })
 
-router.get('/getdetailuser',(req, res) => {
+router.get('/getdetailuser', (req, res) => {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
     //console.log(token)
     if (token === null) return next(customError('Authentication tidak ditemukan',401))
     const user = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
-    response(res, true, user, 'Get User Success', 200)
+    response(res, true, user , 'Get User Success', 200)
 })
 
 

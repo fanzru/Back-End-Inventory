@@ -4,7 +4,7 @@ const USER = require('../models/user');
 const ITEMS = require('../models/Item');
 const {response} = require('../controllers/response');
 const error = null
-
+const {uploadImage,upload } = require('../controllers/upload')
 router.get('/',async (req,res)=>{
     const listborrower = await BORROWER.aggregate([
         {
@@ -52,7 +52,7 @@ router.get('/',async (req,res)=>{
     }
 })
 
-router.post('/requestItem', async (req,res)=>{
+router.post('/requestItem',upload.single('itemPicture'), async (req,res)=>{
     const date = new Date().toISOString().split('T')[0];
     const item = await ITEMS.findOne({_id: req.body.itemId})
     const user = await USER.findOne({_id: req.body.userId})
@@ -73,7 +73,9 @@ router.post('/requestItem', async (req,res)=>{
     } else if (item.itemAmount < req.body.itemBorrow) {
         return response(res,false,item,'item not available',400)
     }
-
+    let name = (req.file.path).split('/')
+    const url = await uploadImage(req.file.path,name[1])
+    
     const newRequest = new BORROWER({
         borrowId: itemCode,
         userId: req.body.userId,
@@ -82,6 +84,7 @@ router.post('/requestItem', async (req,res)=>{
         dateBorrow: '-',
         dateReturn: '-',
         guarantee: req.body.guarantee,
+        guaranteePicture: url, 
         dateRequest: date,
         status: "in process"
     })
