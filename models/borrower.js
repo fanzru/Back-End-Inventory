@@ -42,11 +42,11 @@ const newSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    dateRequestUser:{
+    dateBorrowUser:{
         type: String,
         required: true
     },
-    dateBorrowUser:{
+    dateReturnUser:{
         type: String,
         required: true
     }

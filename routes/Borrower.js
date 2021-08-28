@@ -87,8 +87,8 @@ router.post('/requestItem',upload.single('itemPicture'), async (req,res)=>{
         guaranteePicture: url, 
         dateRequest: date,
         status: "in process",
-        dateRequestUser: req.body.dateRequestUser,
-        dateBorrowUser: req.body.dateBorrowUser
+        dateBorrowUser: req.body.dateBorrowUser,
+        dateReturnUser: req.body.dateReturnUser
     })
     
     
