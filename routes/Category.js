@@ -3,6 +3,7 @@ const CATEGORY = require('../models/category');
 const ITEMS = require('../models/Item');
 const error = null;
 const {response} = require('../controllers/response')
+const { authenticateToken} = require('../controllers/auth')
 // Add Category
 
 router.get('/', async (req,res)=> {
@@ -43,7 +44,7 @@ router.get('/searchCategory/:categoryId',async (req,res)=> {
     }
 })
 
-router.delete('/deleteCategory/:categoryId', async (req,res)=> {
+router.delete('/deleteCategory/:categoryId', authenticateToken, async (req,res)=> {
     try {
         const cekCategory = await ITEMS.findOne({categoryId: req.params.categoryId})
         if (cekCategory != null) return response(res,false,error,'Category Has Been Used in Item',400)

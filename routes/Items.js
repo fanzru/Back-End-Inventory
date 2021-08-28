@@ -3,6 +3,7 @@ const ITEMS = require('../models/Item')
 const Category = require('../models/category')
 const BORROWER = require('../models/borrower')
 const { response } = require('../controllers/response')
+const {uploadImage,upload } = require('../controllers/upload')
 // Get all Data
 const error = null
 router.get('/', async (req, res) => {
@@ -35,7 +36,7 @@ router.get('/', async (req, res) => {
   }
 })
 // Input New item
-router.post('/inputnewItem', async (req, res) => {
+router.post('/inputnewItem',upload.single('itemPicture'), async (req, res) => {
   let kode = 'BRG-'
   let itemCode = kode + 0
   var lastDoc = await ITEMS.find().sort({ _id: -1 }).limit(1)
@@ -48,9 +49,13 @@ router.post('/inputnewItem', async (req, res) => {
 
   const itemExist = await ITEMS.findOne({ itemName: req.body.itemName })
   if (itemExist) return response(res, false, lastDoc, 'Item Already Exist', 400)
-
+  
+  let name = (req.file.path).split('/')
+  const url = await uploadImage(req.file.path,name[1])
+  
   const newItem = new ITEMS({
     categoryId: req.body.categoryId,
+    itemPicture: url,
     itemName: req.body.itemName,
     itemCode: itemCode,
     itemAmount: req.body.itemAmount,

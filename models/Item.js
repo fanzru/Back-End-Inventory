@@ -10,6 +10,10 @@ const newSchema = new mongoose.Schema({
         type: String,
         require: true
     },
+    itemPicture: {
+        type: String,
+        require: true
+    },
     itemName: {
         type: String,
         required: true,
