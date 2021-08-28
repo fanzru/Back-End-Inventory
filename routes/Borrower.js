@@ -52,7 +52,7 @@ router.get('/',async (req,res)=>{
     }
 })
 
-router.post('/requestItem',upload.single('itemPicture'), async (req,res)=>{
+router.post('/requestItem',upload.single('guaranteePicture'), async (req,res)=>{
     const date = new Date().toISOString().split('T')[0];
     const item = await ITEMS.findOne({_id: req.body.itemId})
     const user = await USER.findOne({_id: req.body.userId})
