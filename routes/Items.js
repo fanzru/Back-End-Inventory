@@ -61,7 +61,7 @@ router.post('/inputnewItem',upload.single('itemPicture'), async (req, res) => {
     itemAmount: req.body.itemAmount,
     itemInBorrow: 0,
   })
-
+  console.log(newItem)
   try {
     const savedItem = await newItem.save()
     response(res, true, savedItem, 'Input Item Succes', 200)

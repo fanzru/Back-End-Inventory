@@ -14,12 +14,12 @@ router.get('/', async (req,res)=> {
         response(res,false,error,'Get All Category Failed',400)
     }
 })
+
 router.post('/addCategory',async (req,res)=>{
     const categoryExist = await CATEGORY.findOne({categoryName: req.body.categoryName});
     if (categoryExist){
         return response(res,false,categoryExist,'Category Exist',400)
     };
-    
     const newCategory = new CATEGORY({
         categoryName: req.body.categoryName
     })

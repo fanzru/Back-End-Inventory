@@ -31,14 +31,13 @@ const upload = multer ({
 })
 
 async function uploadImage(file,name) {
-    const url = await cloudinary.v2.uploader.upload(file, {public_id: 'RPL_Inventory/barcode/'+name});
+    const url = await cloudinary.v2.uploader.upload(file, {public_id: 'RPL_Inventory/picture/'+name});
     
     let paths = __dirname.split("/controllers")[0];
 
     fs.unlink(`${paths}/uploads/${name}`, (err) => {
         if(err) return null
     });
-    console.log(url.url,'=================')
     return url.url
 }
 
