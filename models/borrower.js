@@ -41,6 +41,14 @@ const newSchema = new mongoose.Schema({
     status: {
         type: String,
         required: true
+    },
+    dateRequestUser:{
+        type: String,
+        required: true
+    },
+    dateBorrowUser:{
+        type: String,
+        required: true
     }
 });
 

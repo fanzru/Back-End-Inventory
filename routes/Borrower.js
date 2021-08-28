@@ -75,7 +75,7 @@ router.post('/requestItem',upload.single('itemPicture'), async (req,res)=>{
     }
     let name = (req.file.path).split('/')
     const url = await uploadImage(req.file.path,name[1])
-    
+
     const newRequest = new BORROWER({
         borrowId: itemCode,
         userId: req.body.userId,
@@ -86,9 +86,12 @@ router.post('/requestItem',upload.single('itemPicture'), async (req,res)=>{
         guarantee: req.body.guarantee,
         guaranteePicture: url, 
         dateRequest: date,
-        status: "in process"
+        status: "in process",
+        dateRequestUser: req.body.dateRequestUser,
+        dateBorrowUser: req.body.dateBorrowUser
     })
-
+    
+    
     try {
         const savedRequestBorrow = await newRequest.save();
         response(res,true,savedRequestBorrow,'Add Request Success',200)
