@@ -3,9 +3,6 @@ const multer = require('multer');
 const cloudinaryStorage = require('multer-storage-cloudinary')
 const cloudinary = require('../config/cloudinary')
 const fs = require('fs');
-
-
-
 const storage = multer.diskStorage({
     destination: function(req,file,cb){
         cb(null,'uploads/')
@@ -18,7 +15,7 @@ const storage = multer.diskStorage({
 const upload = multer ({
     storage: storage,
     fileFilter: function(req,file,callback){
-        if ((file.mimetype == 'image/jpg')|| (file.mimetype == "image/png")){
+        if ((file.mimetype == 'image/jpg') || (file.mimetype == "image/png") || (file.mimetype == "image/jpeg")){
             callback(null,true)
         } else {
             console.log('Only jpg & png file supported!')
