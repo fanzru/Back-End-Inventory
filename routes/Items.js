@@ -4,7 +4,6 @@ const Category = require('../models/category')
 const BORROWER = require('../models/borrower')
 const { response } = require('../controllers/response')
 const {uploadImage,upload } = require('../controllers/upload')
-const path = require('path')
 // Get all Data
 const error = null
 router.get('/', async (req, res) => {
@@ -101,6 +100,7 @@ router.delete('/deleteItem/:itemid', async (req, res) => {
 
     if (dataBorrower != null) return response(res, false, error, 'delete item failed', 400)
 
+    
     const deleteItem = await ITEMS.remove({ _id: req.params.itemid })
     response(res, true, deleteItem, 'delete item success', 200)
   } catch {
