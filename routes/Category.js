@@ -15,7 +15,7 @@ router.get('/', async (req,res)=> {
     }
 })
 
-router.post('/addCategory',async (req,res)=>{
+router.post('/addCategory',authenticateToken,async (req,res)=>{
     const categoryExist = await CATEGORY.findOne({categoryName: req.body.categoryName});
     if (categoryExist){
         return response(res,false,categoryExist,'Category Exist',400)
@@ -55,7 +55,7 @@ router.delete('/deleteCategory/:categoryId', authenticateToken, async (req,res)=
     }
 })
 
-router.post('/updateCategory/:categoryId', async (req,res)=> {
+router.post('/updateCategory/:categoryId', authenticateToken,async (req,res)=> {
     const category = await CATEGORY.findOne({_id: req.params.categoryId})
     if (category === null) {
         return response(res,false,error,'Category Not Found',400)

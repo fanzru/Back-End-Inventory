@@ -5,6 +5,7 @@ const ITEMS = require('../models/Item');
 const {response} = require('../controllers/response');
 const error = null
 const {uploadImage,upload } = require('../controllers/upload')
+const {authenticateToken} = require('../controllers/auth')
 router.get('/',async (req,res)=>{
     const listborrower = await BORROWER.aggregate([
         {
@@ -52,7 +53,7 @@ router.get('/',async (req,res)=>{
     }
 })
 
-router.post('/requestItem',upload.single('guaranteePicture'), async (req,res)=>{
+router.post('/requestItem',upload.single('guaranteePicture'),authenticateToken, async (req,res)=>{
     const date = new Date().toISOString().split('T')[0];
     const item = await ITEMS.findOne({_id: req.body.itemId})
     const user = await USER.findOne({_id: req.body.userId})
@@ -90,8 +91,6 @@ router.post('/requestItem',upload.single('guaranteePicture'), async (req,res)=>{
         dateBorrowUser: req.body.dateBorrowUser,
         dateReturnUser: req.body.dateReturnUser
     })
-    
-    
     try {
         const savedRequestBorrow = await newRequest.save();
         response(res,true,savedRequestBorrow,'Add Request Success',200)
@@ -100,7 +99,7 @@ router.post('/requestItem',upload.single('guaranteePicture'), async (req,res)=>{
     }
 })
 
-router.post('/changeStatus/:borrowId',async (req,res)=> {
+router.post('/changeStatus/:borrowId',authenticateToken,async (req,res)=> {
     const borrower = await BORROWER.findOne({_id: req.params.borrowId})
     if (borrower.length != 0) {
         const item = await ITEMS.findOne({_id: borrower.itemId})

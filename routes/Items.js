@@ -5,6 +5,7 @@ const BORROWER = require('../models/borrower')
 const { response } = require('../controllers/response')
 const {uploadImage,upload } = require('../controllers/upload')
 // Get all Data
+const {authenticateToken} = require('../controllers/auth')
 const error = null
 router.get('/', async (req, res) => {
   try {
@@ -36,7 +37,7 @@ router.get('/', async (req, res) => {
   }
 })
 // Input New item
-router.post('/inputnewItem',upload.single('itemPicture'), async (req, res) => {
+router.post('/inputnewItem',upload.single('itemPicture'),authenticateToken, async (req, res) => {
   let kode = 'BRG-'
   let itemCode = kode + 0
   var lastDoc = await ITEMS.find().sort({ _id: -1 }).limit(1)
@@ -81,7 +82,7 @@ router.get('/findItem/:itemid', async (req, res) => {
   }
 })
 // rename item using item id
-router.post('/updateItem/:itemid', async (req, res) => {
+router.post('/updateItem/:itemid', authenticateToken,async (req, res) => {
   try {
     const updateItem = await ITEMS.findOne({ _id: req.params.itemid })
     if (updateItem == null) return response(res, false, error, `item Not Found`, 400)
@@ -94,7 +95,7 @@ router.post('/updateItem/:itemid', async (req, res) => {
   }
 })
 // delete item using item id
-router.delete('/deleteItem/:itemid', async (req, res) => {
+router.delete('/deleteItem/:itemid',authenticateToken, async (req, res) => {
   try {
     const dataBorrower = await BORROWER.findOne({ itemId: req.params.itemid })
 
@@ -108,7 +109,7 @@ router.delete('/deleteItem/:itemid', async (req, res) => {
   }
 })
 
-router.post('/minItem/:itemid/:amountitem', async (req, res) => {
+router.post('/minItem/:itemid/:amountitem',authenticateToken, async (req, res) => {
   try {
     const item = await ITEMS.findOne({ _id: req.params.itemid })
     console.log(typeof item.itemAmount, typeof itemAmount)
@@ -122,7 +123,7 @@ router.post('/minItem/:itemid/:amountitem', async (req, res) => {
   }
 })
 
-router.post('/addItem/:itemid/:amountitem', async (req, res) => {
+router.post('/addItem/:itemid/:amountitem',authenticateToken, async (req, res) => {
   try {
     const item = await ITEMS.findOne({ _id: req.params.itemid })
     if (item.length != 0 && 1 <= req.params.amountitem) {

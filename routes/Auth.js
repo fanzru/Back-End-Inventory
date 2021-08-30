@@ -99,7 +99,8 @@ router.post('/login',async(req,res)=> {
     token = signUser(userFound)
     if (userFound.email === 'adminlab@gmail.com' && realAdmin) {
         res.header('authorization',token).status(200).json({
-            status: 200,
+            status: true,
+            code: 200,
             message: "Login Success",
             type: 'Admin',
             accessToken: token,
@@ -107,7 +108,8 @@ router.post('/login',async(req,res)=> {
         })
     } else {
         res.header('authorization',token).status(200).json({
-            status: 200,
+            status: true,
+            code: 200,
             message: "Login Success",
             type: 'User',
             accessToken: token,
@@ -117,13 +119,33 @@ router.post('/login',async(req,res)=> {
 })
 
 router.get('/getdetailuser', (req, res) => {
-    const authHeader = req.headers['authorization']
-    const token = authHeader && authHeader.split(' ')[1]
-    //console.log(token)
-    if (token === null) return next(customError('Authentication tidak ditemukan',401))
-    const user = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
-    response(res, true, user , 'Get User Success', 200)
+        
+    try{
+        const authHeader = req.headers['authorization']
+        const token = authHeader && authHeader.split(' ')[1]
+        //console.log(token)
+        if (token === null) return next(customError('Authentication tidak ditemukan',401))
+        const user = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        if (user._id.email == 'adminlab@gmail.com') {
+            res.header('authorization',token).status(200).json({
+                status: true,
+                code: 200,
+                message: "Get Detail Success",
+                type: 'Admin',
+                details: user
+            })
+        } else {
+            res.header('authorization',token).status(200).json({
+                status: true,
+                code: 200,
+                message: "Get Detail Success",
+                type: 'User',
+                details: user
+            })
+        }
+    } catch {
+        response(res,false,error,'Get Details Failed',400)
+    }
 })
-
 
 module.exports = router;

@@ -4,13 +4,12 @@ const {customError} = require('../controllers/response');
 require('dotenv').config()
 
 function signUser(user) {
-    return jwt.sign({_id: user}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: 60*30}) // 60detik * 30 = 30 menit
+    return jwt.sign({_id: user}, process.env.ACCESS_TOKEN_SECRET) // 60detik * 30 = 30 menit
 }
 
 async function authenticateToken(req,res,next) {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
-    console.log(token)
     
     if (token === null) return next(customError('Authentication tidak ditemukan',401))
 
