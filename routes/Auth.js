@@ -2,7 +2,7 @@ const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const jwt    = require('jsonwebtoken'); 
 const USERS   = require('../models/user');
-const {RegisterValidation,LoginValidation } = require('../validator/validationAuth')
+const {RegisterValidation,LoginValidation ,updateValidation} = require('../validator/validationAuth')
 const handlererror = null
 const {response} = require('../controllers/response')
 const error = null
@@ -118,8 +118,7 @@ router.post('/login',async(req,res)=> {
     }
 })
 
-router.get('/getdetailuser', (req, res) => {
-        
+router.get('/getdetailuser', (req, res) => {    
     try{
         const authHeader = req.headers['authorization']
         const token = authHeader && authHeader.split(' ')[1]
@@ -148,4 +147,27 @@ router.get('/getdetailuser', (req, res) => {
     }
 })
 
+router.post('/update/:id',authenticateToken,async (req,res)=> {
+    try {
+        const {err} = await updateValidation(req.body)
+        
+        const user = await USERS.findOne({_id: req.params.id})
+       
+        if (!user) return response(res,false,error,'user not found',400)
+        if (err) return response(res,false,error,'error input',400)
+        
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(req.body.password,salt);
+        
+        user.email = req.body.email
+        user.password = hashedPassword
+        user.homeAddress =  req.body.homeAddress
+        user.phoneNumber = req.body.phoneNumber
+        
+        
+        response(res,true,user,'update user success',200)
+    }catch {
+        response(res,false,error,'update user failed',400)
+    }
+})
 module.exports = router;

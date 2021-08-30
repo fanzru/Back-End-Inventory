@@ -28,5 +28,16 @@ const LoginValidation = data => {
     return Schema.validate(data);
 }
 
+const updateValidation = data => {
+    const Schema = Joi.object({
+        phoneNumber: Joi.string().required(),
+        homeAddress: Joi.string().required(),
+        email: Joi.string().email().required(),
+        password: Joi.string().min(6).required()
+        
+    })
+    return Schema.validate(data);
+}
 module.exports.RegisterValidation = RegisterValidation;
 module.exports.LoginValidation = LoginValidation;
+module.exports.updateValidation = updateValidation;
