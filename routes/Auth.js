@@ -119,12 +119,16 @@ router.post('/login',async(req,res)=> {
 })
 
 router.get('/getdetailuser', (req, res) => {    
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    
+    if (token === null) return next(customError('Authentication tidak ditemukan',401))
+    const user = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+    
     try{
-        const authHeader = req.headers['authorization']
-        const token = authHeader && authHeader.split(' ')[1]
-        //console.log(token)
-        if (token === null) return next(customError('Authentication tidak ditemukan',401))
-        const user = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+        
+        console.log(bcrypt.encodeBase64(user._id.password))
+        
         if (user._id.email == 'adminlab@gmail.com') {
             res.header('authorization',token).status(200).json({
                 status: true,
@@ -163,8 +167,7 @@ router.post('/update/:id',authenticateToken,async (req,res)=> {
         user.password = hashedPassword
         user.homeAddress =  req.body.homeAddress
         user.phoneNumber = req.body.phoneNumber
-        
-        
+        user.save()
         response(res,true,user,'update user success',200)
     }catch {
         response(res,false,error,'update user failed',400)
