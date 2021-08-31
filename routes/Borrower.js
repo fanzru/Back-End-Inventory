@@ -136,7 +136,16 @@ router.post('/changeStatus/:borrowId',authenticateToken,async (req,res)=> {
         response(res,false,error,'Change Status Failed',400)
     }
 })
+router.get('/user/:id',authenticateToken, async (req,res)=> {
+  
+  try {
+    const borrow = await BORROWER.find({userId: req.params.id})
+    response(res,true,borrow,'Get Item Borrow User Success',200)
+  } catch {
+    response(res,false,error,'Get Item Borrow User Failed',400)
+  }
 
+})
 router.delete('/delete/:borrowID')
 
 module.exports = router;
