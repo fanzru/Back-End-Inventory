@@ -4,6 +4,7 @@ const Category = require('../models/category')
 const BORROWER = require('../models/borrower')
 const { response } = require('../controllers/response')
 const {uploadImage,upload } = require('../controllers/upload')
+const mongoose = require('mongoose')
 // Get all Data
 const {authenticateToken} = require('../controllers/auth')
 const error = null
@@ -123,30 +124,39 @@ router.delete('/deleteItem/:itemid',authenticateToken, async (req, res) => {
   }
 })
 
-router.post('/minItem/:itemid/:amountitem',authenticateToken, async (req, res) => {
-  try {
-    const item = await ITEMS.findOne({ _id: req.params.itemid })
-    console.log(typeof item.itemAmount, typeof itemAmount)
-    if (item.length != 0 && item.itemAmount >= itemAmount) {
-      item.itemAmount -= parseInt(req.params.amountitem)
-      const savedItem = await item.save()
-      response(res, true, savedItem, 'Min Item Succes', 200)
+router.post('/minItem/:itemid/:itemAmount',authenticateToken, async (req, res) => {
+  const itemExist = await ITEMS.exists({ _id: req.params.itemid })
+    if (itemExist) {
+      const item = await ITEMS.findOne({ _id: req.params.itemid})
+      if (parseInt(item.itemAmount) >= parseInt(req.params.itemAmount) ){
+    
+        item.itemAmount -= parseInt(req.params.itemAmount)
+        const savedItem = await item.save()
+        response(res, true, savedItem, 'Min Item Succes', 200)
+      }else {
+        response(res, false, error, 'Min Item Failed', 400)
+      }
+    } else {
+      response(res, false, error, 'Min Item Failed', 400)
     }
+  try {
+    
   } catch {
     response(res, false, error, 'Min Item Failed', 400)
   }
 })
 
-router.post('/addItem/:itemid/:amountitem',authenticateToken, async (req, res) => {
+router.post('/addItem/:itemid/:itemAmount',authenticateToken, async (req, res) => {
   try {
-    const item = await ITEMS.findOne({ _id: req.params.itemid })
-    if (item.length != 0 && 1 <= req.params.amountitem) {
-      item.itemAmount += parseInt(req.params.amountitem)
+    const itemExist = await ITEMS.exists({ _id: req.params.itemid })
+    if (itemExist && 1 <= req.params.itemAmount) {
+      const item = await ITEMS.findOne({ _id: req.params.itemid})
+      item.itemAmount += parseInt(req.params.itemAmount)
       const savedItem = await item.save()
       response(res, true, savedItem, 'Return Item Succes', 200)
     }
   } catch {
-    response(res, false, error, 'item not found', 400)
+    response(res, false, error, 'add item ', 400)
   }
 })
 
