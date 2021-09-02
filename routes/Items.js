@@ -85,7 +85,9 @@ router.get('/findItem/:itemid', async (req, res) => {
 router.post('/updateItem/:itemid', authenticateToken,async (req, res) => {
   try {
     const updateItem = await ITEMS.findOne({ _id: req.params.itemid })
-    if (updateItem == null) return response(res, false, error, `item Not Found`, 400)
+    if (updateItem.length == 0) return response(res, false, error, `item Not Found`, 400)
+    const categorycek = await Category.findOne({_id: req.body.categoryId})
+    if (categorycek.length == 0) return response(res, false, error, `category Not Found`, 400)
     updateItem.categoryId = req.body.categoryId
     updateItem.itemName   = req.body.itemName
     updateItem.save()
@@ -94,14 +96,26 @@ router.post('/updateItem/:itemid', authenticateToken,async (req, res) => {
     response(res, false, error, `item Not Found`, 400)
   }
 })
+// update picture 
+router.post('/updatePicture/:itemid', upload.single('itemPicture'),authenticateToken, async (req,res)=> {
+  try {    
+    const updateItem = await ITEMS.findOne({ _id: req.params.itemid })
+    if (updateItem == null) return response(res, false, error, `item Not Found`, 400)
+    let name = (req.file.path).split('/')
+    const url = await uploadImage(req.file.path,name[1])
+    updateItem.itemPicture = url
+    updateItem.save()
+    response(res, true, updateItem, 'Update Success', 200)
+  } catch {
+    response(res, false, error, `Update Failed`, 400)
+  }
+})
 // delete item using item id
 router.delete('/deleteItem/:itemid',authenticateToken, async (req, res) => {
   try {
     const dataBorrower = await BORROWER.findOne({ itemId: req.params.itemid })
 
     if (dataBorrower != null) return response(res, false, error, 'delete item failed', 400)
-
-    
     const deleteItem = await ITEMS.remove({ _id: req.params.itemid })
     response(res, true, deleteItem, 'delete item success', 200)
   } catch {

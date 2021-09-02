@@ -136,10 +136,33 @@ router.post('/changeStatus/:borrowId',authenticateToken,async (req,res)=> {
         response(res,false,error,'Change Status Failed',400)
     }
 })
+const mongoose = require("mongoose");
 router.get('/user/:id',authenticateToken, async (req,res)=> {
   
+  const borrow = await BORROWER
+  .aggregate([
+    {
+      $lookup: {
+        from: ITEMS.collection.name,
+        let: {
+          itemId: { $toObjectId: '$itemId' },
+        },
+        as: 'detailItem',
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ['$$itemId', '$_id'],
+              },
+            },
+          },
+        ],
+      },
+    },
+  ])
+  console.log(borrow)
   try {
-    const borrow = await BORROWER.find({userId: req.params.id})
+    //const borrow = await BORROWER.find({userId: req.params.id})
     response(res,true,borrow,'Get Item Borrow User Success',200)
   } catch {
     response(res,false,error,'Get Item Borrow User Failed',400)
