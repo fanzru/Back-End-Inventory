@@ -138,36 +138,37 @@ router.post('/changeStatus/:borrowId',authenticateToken,async (req,res)=> {
 })
 const mongoose = require("mongoose");
 router.get('/user/:id',authenticateToken, async (req,res)=> {
-  
-  const borrow = await BORROWER
-  .aggregate([
-    {
-      $lookup: {
-        from: ITEMS.collection.name,
-        let: {
-          itemId: { $toObjectId: '$itemId' },
-        },
-        as: 'detailItem',
-        pipeline: [
-          {
-            $match: {
-              $expr: {
-                $eq: ['$$itemId', '$_id'],
+  try {
+    const borrowExist = await BORROWER.exists({userId: req.params.id})
+    if(!borrowExist) return response(res,false,error,'User Not Found',400)
+    const borrow = await BORROWER
+    .aggregate([
+      {
+          $match: {userId: req.params.id},
+      },
+      {
+        $lookup: {
+          from: ITEMS.collection.name,
+          let: {
+            itemId: { $toObjectId: '$itemId' },
+          },
+          as: 'detailItem',
+          pipeline: [
+            {
+              $match: {
+                $expr: {
+                  $eq: ['$$itemId', '$_id'],
+                },
               },
             },
-          },
-        ],
+          ],
+        },
       },
-    },
-  ])
-  console.log(borrow)
-  try {
-    //const borrow = await BORROWER.find({userId: req.params.id})
+    ])
     response(res,true,borrow,'Get Item Borrow User Success',200)
   } catch {
     response(res,false,error,'Get Item Borrow User Failed',400)
   }
-
 })
 router.delete('/delete/:borrowID')
 
